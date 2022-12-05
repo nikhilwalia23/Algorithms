@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int find(vector <int> &a,int i){if(i==a[i]){return i;}else{int res=find(a,a[i]);return a[i]=res;}}
+void merge(vector <int> &a,int f,int s){f=find(a,f),s=find(a,s);if(f>=s){a[s]=f;}else{a[f]=s;}}
+int main()
+{
+    //Scan Node and Number of Edges
+    int n,e;
+    cin >> n >> e;
+    vector <pair<int,pair<int,int>>> g;
+    for(int i=0;i<e;i++)
+    {
+        int w,u,v;
+        cin >> w >> u >> v;
+        g.push_back({w,{u,v}});
+    }
+    //Sort All Edges Based on Their Weight
+    sort(g.begin(),g.end());
+    vector <pair<int,pair<int,int>>> minstree;
+    vector <int> rep;
+    for(int i=0;i<n;i++)
+    {
+        rep.push_back(i);
+    }
+    for(int i=0;i<e;i++)
+    {
+        //Check for Both Repersantitive
+        int u=find(rep,g[i].second.first);
+        int v=find(rep,g[i].second.second);
+
+        //If not Same Then Merget Two Node
+        if(u!=v)
+        {
+            merge(rep,g[i].second.first,g[i].second.second);
+            minstree.push_back(g[i]);
+        }
+    }
+    //Print Edges of Minimum Spaning Tree
+    for(int i=0;i<minstree.size();i++)
+    {
+        cout << minstree[i].second.first << "----"<< minstree[i].second.second << "-> " << minstree[i].first << "\n";
+    }
+    return 0;
+}
